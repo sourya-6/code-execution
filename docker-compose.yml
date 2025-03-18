@@ -1,27 +1,27 @@
-version: '3.8'  # Recommended version
+version: '3.8'
 
 services:
   backend:
     build:
-      context: .
-      dockerfile: src/Dockerfile  # 👈 Specify the correct path
+      context: ./backend  # 👈 Point to the backend folder
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
     depends_on:
       - redis
     volumes:
-      - .:/app
+      - ./backend:/app
     command: ["node", "src/server.js"]
 
   worker:
     build:
-      context: .
-      dockerfile: src/Dockerfile  # 👈 Specify the correct path
+      context: ./backend  # 👈 Same backend folder
+      dockerfile: Dockerfile
     depends_on:
       - redis
       - backend
     volumes:
-      - .:/app
+      - ./backend:/app
     command: ["node", "src/worker.js"]
 
   redis:
