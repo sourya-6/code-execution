@@ -23,8 +23,9 @@ app.post("/execute", async (req, res) => {
 // Get Execution Result
 app.get("/result/:jobId", async (req, res) => {
     const { jobId } = req.params;
+    
     const result = await redisClient.get(`jobResults:${jobId}`);
-
+    console.log(result);
     if (!result) {
         return res.json({ status: "Processing" });
     }
