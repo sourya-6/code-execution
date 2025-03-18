@@ -1,8 +1,10 @@
-
+version: '3.8'  # Recommended version
 
 services:
   backend:
-    build: .
+    build:
+      context: .
+      dockerfile: src/Dockerfile  # 👈 Specify the correct path
     ports:
       - "5000:5000"
     depends_on:
@@ -12,9 +14,12 @@ services:
     command: ["node", "src/server.js"]
 
   worker:
-    build: .
+    build:
+      context: .
+      dockerfile: src/Dockerfile  # 👈 Specify the correct path
     depends_on:
       - redis
+      - backend
     volumes:
       - .:/app
     command: ["node", "src/worker.js"]
@@ -23,3 +28,4 @@ services:
     image: redis:latest
     ports:
       - "6379:6379"
+    restart: always
