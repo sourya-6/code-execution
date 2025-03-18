@@ -26,6 +26,7 @@ app.get("/result/:jobId", async (req, res) => {
     
     const result = await redisClient.get(`jobResults:${jobId}`);
     console.log(result);
+    console.log('hey')
     if (!result) {
         return res.json({ status: "Processing" });
     }
