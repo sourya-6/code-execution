@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+
+  backend:
+    build: ./backend
+    container_name: code-executor
+    depends_on:
+      - redis
+    ports:
+      - "5000:5000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
