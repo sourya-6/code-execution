@@ -14,7 +14,8 @@ app.post("/execute", async (req, res) => {
     }
 
     const jobId = uuidv4();
-    await redisClient.rpush("jobQueue", JSON.stringify({ jobId, code, language }));
+    await redisClient.rPush("jobQueue", JSON.stringify({ jobId, code, language }));
+
     
     res.json({ message: "Job received", jobId });
 });
