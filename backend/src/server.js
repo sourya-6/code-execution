@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 const app = express();
 app.use(bodyParser.json());
 
+// Submit Code for Execution
 app.post("/execute", async (req, res) => {
     const { code, language } = req.body;
     if (!code || !language) {
@@ -16,6 +17,18 @@ app.post("/execute", async (req, res) => {
     await redisClient.rpush("jobQueue", JSON.stringify({ jobId, code, language }));
     
     res.json({ message: "Job received", jobId });
+});
+
+// Get Execution Result
+app.get("/result/:jobId", async (req, res) => {
+    const { jobId } = req.params;
+    const result = await redisClient.get(`jobResults:${jobId}`);
+
+    if (!result) {
+        return res.json({ status: "Processing" });
+    }
+    
+    res.json({ status: "Completed", output: result });
 });
 
 app.listen(5000, () => console.log("Server running on port 5000"));
