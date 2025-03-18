@@ -2,14 +2,22 @@
 
 services:
   backend:
-    build: ./backend
+    build: .
     ports:
       - "5000:5000"
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
     depends_on:
       - redis
+    volumes:
+      - .:/app
+    command: ["node", "src/server.js"]
+
+  worker:
+    build: .
+    depends_on:
+      - redis
+    volumes:
+      - .:/app
+    command: ["node", "src/worker.js"]
 
   redis:
     image: redis:latest
